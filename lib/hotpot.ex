@@ -17,7 +17,7 @@ defmodule Hotpot do
 
   defp children_workers(:follower) do
     [
-      worker(Hotpot.Slave, [Application.get_env(:hotpot, :leader)])
+      worker(Hotpot.Follower, [Application.get_env(:hotpot, :leader)])
     ]
   end
 

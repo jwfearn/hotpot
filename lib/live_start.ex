@@ -2,6 +2,10 @@ defmodule HotPot.LiveStart do
 
   @save_folder "loaded"
 
+  def load_module({mod, bin, path}) do
+    :code.load_binary(mod, path, bin)
+  end
+
   def load_modules do
     {:ok, new_bin} = File.read("foo.bin")
     {module, bin, path} = :erlang.binary_to_term(new_bin)

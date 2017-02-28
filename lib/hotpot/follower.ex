@@ -1,10 +1,10 @@
-defmodule Hotpot.Slave do
+defmodule Hotpot.Follower do
   use GenServer
-  
+
   alias Hotpot.LiveStart
 
   def start_link(leader_node) do
-    Node.connect(leader_node) 
+    Node.connect(leader_node)
     :timer.sleep(1000) #ensure connection
     {:ok, pid} = GenServer.start_link(__MODULE__, nil, name: __MODULE__)
     leader_pid = :global.whereis_name(:hotpot_leader)

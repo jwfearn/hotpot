@@ -1,4 +1,4 @@
-defmodule HotPot.LiveStart do
+defmodule Hotpot.LiveStart do
 
   @save_folder "loaded"
 

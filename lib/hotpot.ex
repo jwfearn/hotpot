@@ -1,18 +1,24 @@
 defmodule Hotpot do
-  @moduledoc """
-  Documentation for Hotpot.
-  """
+  use Application
+  import Supervisor.Spec, warn: false
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    children = children_workers(Application.get_env(:hotpot, :role))
 
-  ## Examples
-
-      iex> Hotpot.hello
-      :world
-
-  """
-  def hello do
-    :world
+    opts = [strategy: :one_for_one, name: Hotpot.Supervisor]
+    Supervisor.start_link(children, opts)
   end
+
+  defp children_workers(:leader) do
+    [
+      worker(Hotpot.Leader, [])
+    ]
+  end
+
+  defp children_workers(:slave) do
+    [
+      worker(Hotpot.Slave, [Application.get_env(:hotpot, :leader)])
+    ]
+  end
+
 end

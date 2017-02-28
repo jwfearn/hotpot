@@ -1,4 +1,4 @@
-defmodule HotPot.Leader do
+defmodule Hotpot.Leader do
   use GenServer
 
   def start_link do

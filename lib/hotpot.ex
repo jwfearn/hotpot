@@ -5,19 +5,19 @@ defmodule Hotpot do
   def start(_type, _args) do
     children = children_workers(Application.get_env(:hotpot, :role))
 
-    opts = [strategy: :one_for_one, name: Hotpot.Supervisor]
+    opts = [strategy: :one_for_all, name: Hotpot.Supervisor, max_restarts: 999_999_999_999, max_seconds: 999_999_999_999]
     Supervisor.start_link(children, opts)
   end
 
   defp children_workers(:leader) do
     [
-      worker(Hotpot.Leader, [])
+      worker(Hotpot.Leader, [], restart: :permanent)
     ]
   end
 
   defp children_workers(:follower) do
     [
-      worker(Hotpot.Follower, [Application.get_env(:hotpot, :leader)])
+      worker(Hotpot.Follower, [Application.get_env(:hotpot, :leader)], restart: :permanent)
     ]
   end
 

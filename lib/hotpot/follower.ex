@@ -4,17 +4,20 @@ defmodule Hotpot.Follower do
   alias Hotpot.LiveStart
 
   def start_link(leader_node) do
+    IO.inspect "starting follower"
     Node.connect(leader_node)
     :timer.sleep(1000) #ensure connection
-    {:ok, pid} = GenServer.start_link(__MODULE__, nil, name: __MODULE__)
-    leader_pid = :global.whereis_name(:hotpot_leader)
-    GenServer.cast(leader_pid, {:register, pid})
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+  end
 
-    Task.start_link(fn() ->
+  def init(_params) do
+    leader_pid = :global.whereis_name(:hotpot_leader)
+    GenServer.cast(leader_pid, {:register, self})
+
+    {:ok, task} = Task.start_link(fn() ->
       ping_leader(leader_pid)
     end)
-
-    {:ok, pid}
+    {:ok, nil}   
   end
 
   def ping_leader(leader_pid) do

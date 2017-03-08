@@ -16,7 +16,7 @@ defmodule Hotpot.Follower do
     {:ok, _} = Task.start_link(fn() ->
       ping_leader(leader_pid)
     end)
-    {:ok, nil}   
+    {:ok, nil}
   end
 
   def ping_leader(leader_pid) do

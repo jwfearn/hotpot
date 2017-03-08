@@ -15,12 +15,11 @@ defmodule Hotpot.LiveStart do
       load_module(term)
     end)
  end
-  
+
   def save_module(module_code) do
     binary = :erlang.term_to_binary(module_code)
     {module, _, _} = module_code
     File.mkdir_p(@save_folder)
     File.write(@save_folder <> (module |> Macro.underscore) <> ".bin", binary)
   end
-
 end

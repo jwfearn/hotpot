@@ -31,5 +31,4 @@ defmodule Hotpot.Leader do
       GenServer.cast(pid, {:load, code})
     end)
   end
-
 end

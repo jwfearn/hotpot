@@ -2,11 +2,16 @@ defmodule Hotpot do
   use Application
   import Supervisor.Spec, warn: false
 
-  def start(_type, _args) do
-    children = children_workers(Application.get_env(:hotpot, :role))
+  @infinity 999_999_999_999
 
-    opts = [strategy: :one_for_all, name: Hotpot.Supervisor, max_restarts: 999_999_999_999, max_seconds: 999_999_999_999]
-    Supervisor.start_link(children, opts)
+  def start(_type, _args) do
+    children_workers(Application.get_env(:hotpot, :role))
+    |> Supervisor.start_link(
+        strategy: :one_for_all,
+        name: Hotpot.Supervisor,
+        max_restarts: @infinity,
+        max_seconds: @infinity
+      )
   end
 
   defp children_workers(:leader) do
@@ -16,9 +21,9 @@ defmodule Hotpot do
   end
 
   defp children_workers(:follower) do
+    leader = Application.get_env(:hotpot, :leader)
     [
-      worker(Hotpot.Follower, [Application.get_env(:hotpot, :leader)], restart: :permanent)
+      worker(Hotpot.Follower, [leader], restart: :permanent)
     ]
   end
-
 end

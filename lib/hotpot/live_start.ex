@@ -1,4 +1,4 @@
-defmodule Hotpot.LiveStart do
+defmodule Hotpot.LiveStart do # loads and saves binary files
   @save_folder "bin_cache/"
 
   def load_module({mod, bin, path}) do
@@ -25,7 +25,7 @@ defmodule Hotpot.LiveStart do
   end
 
   defp bin_path(module) do
-    "#{bin_dir()}#{module |> Macro.underscore}.bin"
+    "#{bin_dir()}#{Macro.underscore(module)}.bin"
   end
 
   defp load_bin(filename) do

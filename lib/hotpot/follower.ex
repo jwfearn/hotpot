@@ -5,7 +5,7 @@ defmodule Hotpot.Follower do
 
   def start_link(leader_node) do
     Node.connect(leader_node)
-    :timer.sleep(500) #ensure connection
+    :timer.sleep(500) # ensure connection
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
@@ -13,9 +13,7 @@ defmodule Hotpot.Follower do
     leader_pid = :global.whereis_name(:hotpot_leader)
     GenServer.cast(leader_pid, {:register, {Node.self, self()}})
 
-    {:ok, _} = Task.start_link(fn() ->
-      ping_leader(leader_pid)
-    end)
+    {:ok, _} = Task.start_link(fn -> ping_leader(leader_pid) end)
     {:ok, nil}
   end
 
